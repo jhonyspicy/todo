@@ -20,17 +20,17 @@ app.get('/api/todos', (req, res) => {
 // Create a new todo
 app.post('/api/todos', (req, res) => {
   const { title, completed = false } = req.body;
-  
+
   if (!title) {
     return res.status(400).json({ error: 'Title is required' });
   }
-  
+
   const todo = {
     id: Date.now(),
     title,
     completed
   };
-  
+
   todos.push(todo);
   res.status(201).json(todo);
 });
@@ -40,7 +40,12 @@ app.get('/', (req, res) => {
   res.send('Todo API is running. Use /api/todos to access the API.');
 });
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Todo app listening at http://localhost:${port}`);
-});
+// Start the server only if this file is run directly
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`Todo app listening at http://localhost:${port}`);
+  });
+}
+
+// Export the app for testing
+module.exports = app;
